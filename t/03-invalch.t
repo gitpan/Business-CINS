@@ -4,7 +4,7 @@ use strict;
 use Test;
 use Business::CINS;
 
-BEGIN { plan tests => 8 }
+BEGIN { plan tests => 12 }
 
 # Check some really bad CINSes
 my @values = ('A392690!T','3', 'B035231A$','2',
@@ -15,6 +15,8 @@ while (@values) {
   ok(!defined($cn->check_digit()));
   ok($Business::CINS::ERROR, qr/^Invalid char/,
      "  Did not get the expected error. Got $Business::CINS::ERROR\n");
+  ok($cn->error, qr/^Character.*must be/,
+     "  Did not get the expected error. Got ".$cn->error);
 }
 
 __END__

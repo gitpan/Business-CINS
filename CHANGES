@@ -1,3 +1,6 @@
+Version 1.00
+  11/18/01 - Added the error() method.
+
 Version 0.03
   5/9/01 - Added t/06-acc.t test.
 
