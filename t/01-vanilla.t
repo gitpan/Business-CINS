@@ -7,9 +7,9 @@ use Business::CINS;
 BEGIN { plan tests => 24 }
 
 # Check some non-fixed income CINSs
-my @values = ('P8055KAP0','0', 'Y39993AD5','6', 'G4768JAA3','4',
-              'Y485632AB','5', 'G98930QAA','4', 'Y7318VAA4','0',
-              'G6954PAK6','3', 'U24627AC2','8'
+my @values = ('P4052KAB','3', 'Y0027NAA','9', 'G49331AA','2',
+              'Y4420RAA','5', 'G9537LAF','6', 'Y74718AM','2',
+              'G6954PAD','2', 'U26054AL','7',
               );
 
 while (@values) {

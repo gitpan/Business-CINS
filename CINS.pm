@@ -34,11 +34,11 @@ use Algorithm::LUHN ();
 my $ct = 10;
 Algorithm::LUHN::valid_chars(map {$_ => $ct++} 'A'..'Z');
 }
-Algorithm::LUHN::valid_chars('*',36, '@',37, '#',38);
+#Algorithm::LUHN::valid_chars('*',36, '@',37, '#',38);
 
 use vars qw($VERSION $ERROR);
 
-$VERSION = '1.00';
+$VERSION = '1.10';
 
 =head1 METHODS
 
@@ -100,7 +100,7 @@ Returns the issuer number from the CINS number.
 =cut
 sub issuer_num {
   my $self = shift;
-  return substr($self->cins, 1, 6);
+  return substr($self->cins, 1, 5);
 }
 
 =item issuer_num()
@@ -110,7 +110,7 @@ Returns the issue number from the CINS number.
 =cut
 sub issue_num {
   my $self = shift;
-  return substr($self->cins, 7, 2);
+  return substr($self->cins, 6, 2);
 }
 
 =item is_valid()
@@ -123,40 +123,50 @@ sub is_valid {
   my $self = shift;
   my $val = $self->cins;
 
-  # CINSes are 10 digits. Char 1 is the domicile code. Chars 2-4 are numeric. 
-  # Chars 5-9 are alphanum plus '@', '#', '*'. Char 10 is numeric.
-  unless (length($val) == 10) {
-    $ERROR = "CINS must be 10 characters long.";
+  # The CINS number consists of nine characters. The first six (6) positions,
+  # known as the issuer number, consist of a country or regional alpha code of
+  # one character, plus five positions, the last of which may be alpha or
+  # numeric. A two character suffix (either numeric or alphabetic or both)
+  # known as the issue number follows. The ninth character is a check digit.
+
+  unless (length($val) == 9) {
+    $ERROR = "CINS must be 9 characters long.";
     return '';
   }
   unless (Business::CINS->domicile_descr($self->domicile_code)) {
     $ERROR = "First character is not a valid domicile code.";
     return '';
   }
-  unless ($val =~ /^.\d{3}/) {
-    $ERROR = "Characters 2-4 must be numeric.";
-    return '';
-  }
-  unless ($val =~ /^.{4}[A-Z0-9@#*]{5}/) {
-    $ERROR = "Characters 5-9 must be A-Z, 0-9, @, #, *.";
+#    unless ($val =~ /^.\d{4}/) {
+#      $ERROR = "Characters 2-5 must be numeric.";
+#      return '';
+#    }
+  unless ($val =~ /^.[A-Z0-9]{7}/) {
+    $ERROR = "Characters 2-8 must be A-Z, 0-9.";
     return '';
   }
   unless ($val =~ /\d$/) {
-    $ERROR = "Character 10 (the check digit) must be numeric.";
+    $ERROR = "Character 9 (the check digit) must be numeric.";
     return '';
   }
 
   # From the CINS spec:
-  #   To avoid confusion, the fixed income issue number assignments have
-  #   omitted the alphabetic "I" and numeric "1 " as well as the alphabetic
-  #   ''O'' and numeric zero.
-  # The issuer number is in positions 8 & 9.
-  if ($self->is_fixed_income && substr($self->cins,7,2) =~ /[I1O0]/) {
-   $ERROR="Fixed income CINS cannot contain I, 1, O, or 0 in the issue number.";
-    return '';
+
+  # Issue Numbers for Fixed Income Securities: The issue number assigned to an
+  # issuer's fixed income securities may consist of two alphabetic characters
+  # (AA, etc.), one alphabetic character followed by one digit (A2, etc.) or
+  # one digit followed by one alphabetic character (2A, etc.), assigned in that
+  # order. Debt securities will be sorted in order by their maturity dates.
+  if ($self->is_fixed_income) {
+    my $issue_num = $self->issue_num;
+    if ($issue_num !~ /^[A-Z][A-Z]$/ and
+        $issue_num !~ /^[A-Z][0-9]$/ and
+        $issue_num !~ /^[0-9][A-Z]$/) {
+      $ERROR = "Fixed income issue number must be alpha-alpha, alpha-num or num-alpha only.";
+      return '';
+    }
   }
 
-  # The domicile code does not figure into the checksum.
   my $r = Algorithm::LUHN::is_valid($self->cins);
   $ERROR = $Algorithm::LUHN::ERROR unless $r;
   return $r;
@@ -165,7 +175,7 @@ sub is_valid {
 =item error()
 
 If the CINS object is not valid (! is_valid()) it returns the reason it is 
-not valid. Otherwise returns undef.
+Not valid. Otherwise returns undef.
 
 =cut
 sub error {
@@ -182,7 +192,7 @@ recalculates the check_digit each time.
 =cut
 sub check_digit {
   my $self = shift;
-  my $r = Algorithm::LUHN::check_digit(substr($self->cins(), 0, 9));
+  my $r = Algorithm::LUHN::check_digit(substr($self->cins(), 0, 8));
   $ERROR = $Algorithm::LUHN::ERROR unless defined $r;
   return $r;
 }
