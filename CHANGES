@@ -1,3 +1,8 @@
+Version 1.12
+  04/01/02 - Fixed error in test cases of t/04-bad.t. It was looking for the
+    string "not correct" from Algorith::LUHN, which changed it to "incoorect."
+    Test now looks for either string.
+
 Version 1.11
   03/25/02 - Fixed error method to jive with with documentation by returning
     "undef" when the CINS was valid.

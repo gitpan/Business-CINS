@@ -38,7 +38,7 @@ Algorithm::LUHN::valid_chars(map {$_ => $ct++} 'A'..'Z');
 
 use vars qw($VERSION $ERROR);
 
-$VERSION = '1.11';
+$VERSION = '1.12';
 
 =head1 METHODS
 
