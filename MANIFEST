@@ -8,3 +8,4 @@ t/02-fixedinc.t
 t/03-invalch.t
 t/04-bad.t
 t/05-dom.t
+t/06-acc.t

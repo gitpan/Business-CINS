@@ -38,7 +38,7 @@ Algorithm::LUHN::valid_chars('*',36, '@',37, '#',38);
 
 use vars qw($VERSION $ERROR);
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 =head1 METHODS
 
@@ -46,7 +46,7 @@ $VERSION = '0.02';
 
 =item new([CINS_NUMBER[, IS_FIXED_INCOME]])
 
-The new constructor takes to optional arguments: the CINS number and a Boolean
+The new constructor takes two optional arguments: the CINS number and a Boolean
 value signifying whether this CINS refers to a fixed income security. CINSes
 for fixed income securities are validated a little differently than other
 CINSes.
@@ -186,7 +186,7 @@ domicile codes are
   C = Canada          L = Luxembourg     U = United States
   D = Germany         M = Mid-East       V = Africa - Other
   E = Spain           N = Netherlands    W = Sweden
-  F = France          P = South America  X= Europe-Other
+  F = France          P = South America  X = Europe-Other
   G = United Kingdom  Q = Australia      Y = Asia
   H = Switzerland     R = Norway
 
