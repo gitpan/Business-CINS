@@ -38,7 +38,7 @@ Algorithm::LUHN::valid_chars(map {$_ => $ct++} 'A'..'Z');
 
 use vars qw($VERSION $ERROR);
 
-$VERSION = '1.10';
+$VERSION = '1.11';
 
 =head1 METHODS
 
@@ -123,6 +123,8 @@ sub is_valid {
   my $self = shift;
   my $val = $self->cins;
 
+  $ERROR = undef;
+
   # The CINS number consists of nine characters. The first six (6) positions,
   # known as the issuer number, consist of a country or regional alpha code of
   # one character, plus five positions, the last of which may be alpha or
@@ -179,8 +181,8 @@ Not valid. Otherwise returns undef.
 
 =cut
 sub error {
-  my $self = shift;
-  return $ERROR unless $self->is_valid;
+  shift->is_valid;
+  return $ERROR;
 }
 
 =item check_digit()
