@@ -72,7 +72,7 @@ foreach ('P805KAP05', 'G468JAA37', 'Y45632AB6', 'Y738VAA45', 'G694PAK68'){
   ok($cn->is_valid, '', "  Expected an error, but CINS $_ seems to be valid.");
   ok($Business::CINS::ERROR, qr/^Check digit (?:in|not )correct/,
      "  Got an unexpected error: $Business::CINS::ERROR.");
-  ok($cn->error, qr/^Check digit (?:in|not ) correct/,
+  ok($cn->error, qr/^Check digit (?:in|not )correct/,
      "  Got an unexpected error: ".$cn->error);
 }
 

@@ -1,3 +1,6 @@
+Version 1.13
+  04/02/02 - Am I stupid or something? Fixed the 1.12 fix to t/04-bad.t.
+
 Version 1.12
   04/01/02 - Fixed error in test cases of t/04-bad.t. It was looking for the
     string "not correct" from Algorith::LUHN, which changed it to "incoorect."
